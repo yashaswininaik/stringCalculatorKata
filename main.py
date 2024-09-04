@@ -5,8 +5,13 @@ class StringCalculator:
         if not numbers:
             return 0
 
-        numbers = numbers.replace('\n', ',')
-        numbers = [int(num) for num in numbers.split(',')]
+        delimiter = ","
+        if numbers.startswith("//"):
+            delimiters, numbers = numbers.split("\n", 1)
+            delimiter = delimiters[2:]
+
+        numbers = numbers.replace('\n', delimiter)
+        numbers = [int(num) for num in numbers.split(delimiter) if num]
         return sum(numbers)
 
 
@@ -22,6 +27,10 @@ class TestStringCalculator(unittest.TestCase):
     def test_newline_delimiter_string(self):
         calc = StringCalculator()
         self.assertEqual(calc.add("1\n2,3"), 6)
+
+    def test_custom_delimiter_string(self):
+        calc = StringCalculator()
+        self.assertEqual(calc.add("//;\n1;2"), 3)
 
 if __name__ == "__main__":
     unittest.main()
