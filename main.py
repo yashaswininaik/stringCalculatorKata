@@ -12,6 +12,11 @@ class StringCalculator:
 
         numbers = numbers.replace('\n', delimiter)
         numbers = [int(num) for num in numbers.split(delimiter) if num]
+        negatives = [num for num in numbers if num < 0]
+
+        if negatives:
+            raise ValueError(f"Negative numbers not allowed: {', '.join(map(str, negatives))}")
+
         return sum(numbers)
 
 
@@ -31,6 +36,10 @@ class TestStringCalculator(unittest.TestCase):
     def test_custom_delimiter_string(self):
         calc = StringCalculator()
         self.assertEqual(calc.add("//;\n1;2"), 3)
+
+    def test_negative_num_string(self):
+        calc = StringCalculator()
+        self.assertEqual(calc.add("//;\n1;-2;3"), "Negative numbers not allowed: -2")
 
 if __name__ == "__main__":
     unittest.main()
